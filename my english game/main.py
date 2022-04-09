@@ -4,30 +4,35 @@ from glob import glob
 import pygame
 import os
 import pyttsx3
+import random
 
 pygame.init()
 
 gameDisplay = pygame.display.set_mode((900, 900))
 background_colour = (255, 255, 255)
 engine = pyttsx3.init()
-display_surface = pygame.display.set_mode((900, 900 ))
+
 
 pngs = [x for x in glob("animals\\*.PNG")]
+pic = random.sample(pngs, k=5)
+
+
+
 names = [x.split(".")[0] for x in glob("animals\\*.PNG")]
-goodjob = pygame.image.load('animals/lion.png')
 white = (255, 255, 255)
-display_surface.fill(white)
 
-animals = {k:v for k, v in zip(pngs, names)}
-print(animals)
 
-print(pngs)
-print(names)
+animals = {k:v for k, v in zip(pic, names)}
+# print(animals)
 
-for n, animals in enumerate(pngs):
-    display_surface.blit(goodjob, (0, 0))
+# print(pic)
+print(pic)
+# print(names)
+
+for n, animals in enumerate(pic):
     guess_counter = 0
-    carImg = pygame.image.load(os.path.join('', animals))
+    carImg =pygame.image.load(os.path.join('', animals))
+    gameDisplay.fill((white))
     gameDisplay.blit(carImg,(0,0))
     pygame.display.update()
     for j in range(1,4):
@@ -44,16 +49,17 @@ for n, animals in enumerate(pngs):
                     text=''
                 if text == names[n].split("\\")[1]:
                     engine.say('good job')
-                    display_surface.blit(goodjob, (0, 0))
                     engine.runAndWait()
                     break
+                elif text == 'quit':
+                        pygame.quit()
                 else:
                     if guess_counter < 3:
                         print('wrong try again')
                         guess_counter += 1
                     else:
                         print("\nSorry no more chances\n\n")
-    time.sleep(2)
+    time.sleep(1)
 
 
 pygame.quit()
